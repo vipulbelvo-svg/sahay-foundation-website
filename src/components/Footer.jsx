@@ -14,9 +14,9 @@ export default function Footer({ content }) {
             <div>
               <p className="text-xs font-black uppercase tracking-[0.32em] text-gold">{content.footer.contact}</p>
               <ul className="mt-5 space-y-4 text-sm text-cream/70">
-                <li className="flex gap-3"><Mail className="size-4 text-ember" /> hello@sahayfoundation.org</li>
-                <li className="flex gap-3"><Phone className="size-4 text-ember" /> +91 98765 43210</li>
-                <li className="flex gap-3"><MapPin className="size-4 text-ember" /> India</li>
+                <li className="flex gap-3"><Mail className="size-4 text-ember" /> sahayfoundation@gmail.com</li>
+                <li className="flex gap-3"><Phone className="size-4 text-ember" /> +91 89284 66820</li>
+                <li className="flex gap-3"><MapPin className="size-4 text-ember" /> Mumbai, India</li>
               </ul>
             </div>
             <div>
