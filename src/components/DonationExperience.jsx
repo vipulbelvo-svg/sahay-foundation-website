@@ -203,13 +203,14 @@ export default function DonationExperience({ content }) {
                     Replace /media/upi-qr.png with your actual QR image.
                     Place the file at: public/media/upi-qr.png
                 ─────────────────────────────────────────────────────────── */}
-                <div className="size-28 shrink-0 overflow-hidden rounded-2xl border border-ink/12 bg-white p-1.5 shadow-sm">
+                <div className="size-40 shrink-0 overflow-hidden rounded-2xl border border-ink/12 bg-white p-2 shadow-sm">
                   <img
-                    src="/media/upi-qr.jpg"
+                    src="/media/upi-qr.jpeg"
                     alt="UPI QR code"
-                    width={100}
-                    height={100}
-                    className="h-full w-full object-contain"
+                    width={150}
+                    height={150}
+                    className="h-full w-full object-contain pointer-events-none select-none"
+                    draggable={false}
                     onError={(e) => {
                       // show icon fallback if image not yet added
                       e.currentTarget.style.display = 'none';

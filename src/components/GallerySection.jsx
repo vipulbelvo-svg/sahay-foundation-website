@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react';
 import { useGsapReveal } from '../hooks/useGsapReveal.js';
 import SectionKicker from './SectionKicker.jsx';
+import GalleryUploader, { loadStoredImages } from './GalleryUploader.jsx';
 
 // ---------------------------------------------------------------------------
 // GallerySection
@@ -12,11 +13,15 @@ import SectionKicker from './SectionKicker.jsx';
 // ---------------------------------------------------------------------------
 
 export default function GallerySection({ content }) {
-  const { photoGallery: ui, photoGalleryItems: allItems } = content;
+  const { photoGallery: ui, photoGalleryItems: seedItems } = content;
 
   const [activeCategory, setActiveCategory] = useState('All');
   const [lightbox, setLightbox]             = useState(null); // index into filtered list
   const [imgLoaded, setImgLoaded]           = useState({});
+
+  // Merge seed items (from siteContent) with anything the user uploaded
+  const [uploadedItems, setUploadedItems] = useState(() => loadStoredImages());
+  const allItems = [...seedItems, ...uploadedItems];
 
   const sectionRef  = useGsapReveal('[data-gallery-reveal]', { stagger: 0.06, y: 28 });
   const filterRef   = useRef(null);
@@ -78,6 +83,15 @@ export default function GallerySection({ content }) {
           />
         </div>
 
+        {/* ── upload panel ──────────────────────────────────────────────── */}
+        <GalleryUploader
+          categories={ui.categories}
+          onImagesChange={(imgs) => {
+            setUploadedItems(imgs);
+            setActiveCategory('All');
+          }}
+        />
+
         {/* ── category filters ──────────────────────────────────────────── */}
         <div
           ref={filterRef}
@@ -106,7 +120,7 @@ export default function GallerySection({ content }) {
         {/* ── image grid ────────────────────────────────────────────────── */}
         <motion.div
           layout
-          className="mt-10 grid auto-rows-[14rem] grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
+          className="mt-10 grid auto-rows-[22rem] grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
         >
           <AnimatePresence mode="popLayout">
             {filtered.map((item, index) => (
@@ -125,7 +139,9 @@ export default function GallerySection({ content }) {
 
         {filtered.length === 0 && (
           <p className="mt-16 text-center text-sm text-cream/44">
-            No images in this category yet.
+            {allItems.length === 0
+              ? 'No photos yet — use the uploader above to add your first image.'
+              : 'No images in this category yet.'}
           </p>
         )}
       </div>
@@ -158,6 +174,10 @@ function GalleryCard({ item, index, onOpen, viewLabel, imgLoaded, setImgLoaded }
     normal: '',
   }[item.span] ?? '';
 
+  // portrait images → object-top so subject isn't cropped at the bottom
+  // landscape images → object-center
+  const objectPos = item.span === 'tall' ? 'object-top' : 'object-center';
+
   return (
     <motion.article
       layout
@@ -174,7 +194,7 @@ function GalleryCard({ item, index, onOpen, viewLabel, imgLoaded, setImgLoaded }
         loading="lazy"
         decoding="async"
         onLoad={() => setImgLoaded((prev) => ({ ...prev, [item.id]: true }))}
-        className={`absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105 ${
+        className={`absolute inset-0 h-full w-full object-cover ${objectPos} transition duration-500 group-hover:scale-105 ${
           imgLoaded[item.id] ? 'opacity-100' : 'opacity-0'
         }`}
         style={{ transitionProperty: 'transform, opacity' }}
