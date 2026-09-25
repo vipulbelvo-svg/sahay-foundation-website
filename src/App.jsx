@@ -211,25 +211,6 @@ useEffect(() => {
 
           <Navbar content={content} language={language} setLanguage={setLanguage} />
 
-          <button
-  onClick={() => setShowLogin(true)}
-  style={{
-    position: "fixed",
-    top: "90px",
-    right: "25px",
-    zIndex: 999999,
-    background: "#ff8a00",
-    color: "#fff",
-    padding: "10px 18px",
-    border: "none",
-    borderRadius: "8px",
-    cursor: "pointer",
-    fontWeight: "bold",
-    boxShadow: "0 5px 15px rgba(0,0,0,.3)"
-  }}
->
-  Admin
-</button>
 
           <main>
             <Hero content={content} />
